@@ -12,6 +12,18 @@ class Utilisateur(ABC): # Hérite de ABC(Abstract Base Class)
     def toString(self):
         pass    # Rien ne se passe à l'interieur de cette methode
 
+    # L'implémentation d'un overloading à la manière d'un code JAVA/C++ ne sera pas possible en python
+    # Nous devrons donc passer les arguments en None
+    # En faisant cela nous avons l'option d'appeler la fonction avec ou sans le paramètre spécifié
+    def Login(self, mail = None, mdp = None):
+        if(mail == None or mdp == None): # Si rien n'est envoyé au niveau du mail ou du mot de passe
+            print("Veuillez entrer vos identifiants") # Alors nous demanderons à l'utilisateur de spécifier ces arguments
+        elif (mail == self.mail and mdp == self.password):
+            print("Vous êtes connecté")
+        elif (mail != self.mail or mdp != self.password):
+            print("les identifiants sont incorrects")
+
+
 
 class Client(Utilisateur):
     def __init__(self, nom, prenom, id, mail, mdp):
@@ -24,6 +36,7 @@ class Client(Utilisateur):
         print("Bonjour " + self.prenom + " " + self.nom +" ! Vous êtes un Client")
 
 
+
 class Salarie (Utilisateur):
     def __init__(self, nom, prenom, id, mdp, salaire):
         mail = nom + prenom + "@locahub.com" # On créée le mail de l'employé de l'entreprise avec l'adresse de l'entreprise
@@ -32,7 +45,7 @@ class Salarie (Utilisateur):
         self.id_Salarie = id # Possède en plus : un attribut id_Salarie
         self.salaire = salaire #Possède en plus : un attributs salaire
 
-    #De la même manière, toString (méthode abstraite) doit être redéfni pour un Salarié
+    #De la même manière, toString (méthode abstraite dans Utilisaeur) doit obligatoirement être redéfnie pour un Salarié
     def toString(self):
         print("Bonjour " + self.prenom +" "+ self.nom +" ! Vous êtes un Salarié")
     # Le salarié possèdera une méthode rémunération qui renverra la rémunération mensuelle d'un salarié
@@ -48,15 +61,15 @@ class Comptable(Salarie):
     # la manière dont est définie la méthode rémunération dans le salarié convient pour le comptable,
     # on ne redéfinira donc pas cette fonction
 class Commercial(Salarie):
-    def __init__(self, nom, prenom, id, mdp, salaireFixe, prime):
+    def __init__(self, nom, prenom, id, mdp, salaireFixe, primeMensuelle):
         super().__init__(nom, prenom, id, mdp, salaireFixe) # Classe Commercial : possède les attributs de la
                                                             # classe Salarié
-        self.prime = prime #Ainsi qu'une prime qui lui sera propre
+        self.primeMensuelle = primeMensuelle #Ainsi qu'une prime qui lui sera propre
 
     # En revanche, un commercial aura des primes qui rentreront en compte dans la rémunération de ce type de poste
     # Il s'agira donc de redéfinir la fonction rémunération
     def remuneration(self):
-        remuneration = self.salaire + self.prime
+        remuneration = self.salaire + self.primeMensuelle
         return remuneration
 
 
